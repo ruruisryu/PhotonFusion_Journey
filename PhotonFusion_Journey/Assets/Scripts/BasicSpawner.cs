@@ -49,12 +49,40 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     // 입력을 보유할 데이터 구조체 정의
     // 클라이언트는 사용자에게 즉각적인 피드백을 제공하기 위해 입력을 로컬에 바로 적용할 수 있지만 호스트에 의해 무시될 수 있는 로컬 예측일 뿐임
-    // 
+    // 호스트가 클라이언트로부터 입력을 수집해 네트워크 상태를 업데이트
+    // Fusion은 입력을 압축하고 실제로 변경되는 데이터만 전송하므로 최적화에 너무 집착할 필요는 없다.
     public struct NetworkInputData : INetworkInput
     {
         public Vector3 direction;
     }
-    public void OnInput(NetworkRunner runner, NetworkInput input) { }
+
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        // 입력 구조 인스턴스화
+        var data = new NetworkInputData();
+        
+        // 입력 구조 data 채우기
+        if (Input.GetKey(KeyCode.W))
+        {
+            data.direction += Vector3.forward;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            data.direction += Vector3.back;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            data.direction += Vector3.left;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            data.direction += Vector3.right;
+        }
+        
+        // 채워진 입력 구조를 Fusion에게 전달
+        // 호스트와 이 클라이언트가 입력 권한을 가진 모든 객체에서 사용가능하도록 한다.
+        input.Set(data);
+    }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnConnectedToServer(NetworkRunner runner) { }
