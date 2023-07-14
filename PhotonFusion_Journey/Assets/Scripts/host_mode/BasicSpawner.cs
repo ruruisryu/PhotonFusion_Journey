@@ -96,6 +96,7 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnSceneLoadDone(NetworkRunner runner) { }
     public void OnSceneLoadStart(NetworkRunner runner) { }
     
+    /**
     private NetworkRunner _runner;
 
     async void StartGame(GameMode mode)
@@ -126,4 +127,5 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
             }
         }
     }
+    **/
 }

@@ -9,9 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/shared_mode/Main.unity
     guid: 8a0a2b9617acb46b89427a90831d5c42
   - enabled: 1
-    path: Assets/Scenes/host_mode/Main.unity
-    guid: f7dfc72091f504f669ef5be7e1f446c0
-  - enabled: 1
-    path: Assets/Scenes/host_mode/Lobby.unity
-    guid: 59ffef97e27224f0ab1bfd8cc0296469
+    path: Assets/Scenes/Game.unity
+    guid: a0def505bd551459db4444bb08e8f77b
   m_configObjects: {}
