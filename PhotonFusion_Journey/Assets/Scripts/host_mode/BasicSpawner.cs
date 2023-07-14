@@ -13,11 +13,10 @@ public class BasicSpawner : MonoBehaviour, INetworkRunnerCallbacks
     // Player가 조인했을 경우 해당 플레이어를 처리해주는 함수
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        // 플레이어가 입장했을 떄 서버에 연결되어 있는지 체크
+        // 플레이어가 입장했을 떄 세션에 연결되어 있는지 체크
         // 플레이어를 스폰해주고, 플레이어 딕셔너리에 추가해준다 - Key: PlayerRef Value: NetworkObject
         // NetworkRunner.Spawn => 유니티의 Instantiate와 비슷한 역할
         
-        // player가 서버와 연결되었는지
         if (runner.IsServer)
         {
             // player 스폰 위치
