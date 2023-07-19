@@ -44,6 +44,7 @@ public class MainUIHandler : MonoBehaviour
         
         HideAllPanels();
         sessionBrowserPanel.SetActive(true);
+        FindObjectOfType<SessionListUIHandler>(true).OnLookingForGameSession();
     }
 
     public void OnCreateNewGameClicked()
@@ -59,5 +60,11 @@ public class MainUIHandler : MonoBehaviour
         
         HideAllPanels();
         statusPanel.SetActive(true);
+    }
+
+    public void OnJoiningServer()
+    {
+        HideAllPanels();
+        statusPanel.gameObject.SetActive(true);
     }
 }

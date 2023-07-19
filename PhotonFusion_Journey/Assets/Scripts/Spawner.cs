@@ -10,6 +10,13 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private NetworkObject _playerPrefab;
     [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
+    private SessionListUIHandler _sessionListUIHandler;
+
+    private void Awake()
+    {
+        _sessionListUIHandler = FindObjectOfType<SessionListUIHandler>(true);
+    }
+
     // Player가 조인했을 경우 해당 플레이어를 처리해주는 함수
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
@@ -46,6 +53,29 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Remove(player);
         }
     }
+
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
+    {
+        if (_sessionListUIHandler == null)
+        {
+            return;
+        }
+
+        if (sessionList.Count == 0)
+        {
+            Debug.Log("Joined Lobby but no sesions found");
+            _sessionListUIHandler.OnNoSessionFound();
+        }
+        else
+        {
+            _sessionListUIHandler.ClearList();
+            foreach (SessionInfo sessionInfo in sessionList)
+            {
+                _sessionListUIHandler.AddToList(sessionInfo);
+                Debug.Log($"Found session {sessionInfo.Name} playerCount {sessionInfo.PlayerCount}");
+            }
+        }
+    }
     void Start()
     {
         
@@ -58,7 +88,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { Debug.Log("OnConnectRequest");}
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { Debug.Log("OnConnectFailed"); }
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }

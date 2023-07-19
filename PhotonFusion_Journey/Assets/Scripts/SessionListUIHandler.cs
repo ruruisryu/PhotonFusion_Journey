@@ -12,6 +12,11 @@ public class SessionListUIHandler : MonoBehaviour
     [SerializeField] private GameObject _sessionItemListPrefab;
     [SerializeField] private VerticalLayoutGroup _verticalLayoutGroup;
 
+    private void Awake()
+    {
+        ClearList();
+    }
+
     public void ClearList()
     {
         foreach (Transform child in _verticalLayoutGroup.transform)
@@ -30,13 +35,18 @@ public class SessionListUIHandler : MonoBehaviour
 
         addedSessionInfoUIItem.OnJoinSession += AddedSessionINfoListUIItem_OnJoinSession;
     }
-
-    private void AddedSessionINfoListUIItem_OnJoinSession(SessionInfo obj)
+    
+    // Join 버튼을 누르면 Invoke되는 함수 (Join에 대한 처리를 함)
+    private void AddedSessionINfoListUIItem_OnJoinSession(SessionInfo sessionInfo)
     {
-        
+        NetworkRunnerHandler networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
+        networkRunnerHandler.JoinGame(sessionInfo);
+
+        MainUIHandler mainUIHandler = FindObjectOfType<MainUIHandler>();
+        mainUIHandler.OnJoiningServer();
     }
 
-    public void OnNOSessionFound()
+    public void OnNoSessionFound()
     {
         _statusText.text = "No game session found";
         _statusText.gameObject.SetActive(true);
