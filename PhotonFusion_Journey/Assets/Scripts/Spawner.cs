@@ -4,17 +4,20 @@ using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System;
+using UnityEngine.UI;
 
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkObject _playerPrefab;
-    [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    [SerializeField] private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters;
+    [SerializeField] private HorizontalLayoutGroup _horizontalLayoutGroup;
 
     private SessionListUIHandler _sessionListUIHandler;
 
     private void Awake()
     {
         _sessionListUIHandler = FindObjectOfType<SessionListUIHandler>(true);
+        _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
     }
 
     // Player가 조인했을 경우 해당 플레이어를 처리해주는 함수
@@ -28,10 +31,12 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         {
             Debug.Log("OnPlayerJoined we are server. Spawning Player");
             // player 스폰 위치
-            Vector3 spawnPosition =
-                new Vector3((player.RawEncoded%runner.Config.Simulation.DefaultPlayers) * 3, 1, 0);
+            Vector3 spawnPosition = new Vector3(0f, 0f, 0f);
             // player 스폰
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            
+            _horizontalLayoutGroup = FindObjectOfType<HorizontalLayoutGroup>();
+            networkPlayerObject.transform.parent = _horizontalLayoutGroup.transform;
             // player를 플레이어 딕셔너리에 Add
             _spawnedCharacters.Add(player, networkPlayerObject);
         }

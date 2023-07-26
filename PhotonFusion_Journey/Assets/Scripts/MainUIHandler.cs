@@ -56,7 +56,7 @@ public class MainUIHandler : MonoBehaviour
     public void OnStartNewSessionClicked()
     {
         NetworkRunnerHandler networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
-        networkRunnerHandler.CreateGame(sessionNameInputField.text, "Game");
+        networkRunnerHandler.CreateGame(sessionNameInputField.text, "Lobby");
         
         HideAllPanels();
         statusPanel.SetActive(true);
