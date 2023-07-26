@@ -4,6 +4,7 @@ using UnityEngine;
 using Fusion;
 using Fusion.Sockets;
 using System;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
@@ -97,7 +98,25 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
     public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
-    public void OnSceneLoadDone(NetworkRunner runner) { }
+
+    public void OnSceneLoadDone(NetworkRunner runner)
+    {/**
+        Debug.Log($"this scene is {SceneManager.GetActiveScene().name}");
+        if (runner.IsServer)
+        {
+            Debug.Log("OnPlayerJoined we are server. Spawning Player");
+            // player 스폰 위치
+            Vector3 spawnPosition = new Vector3(0f, 0f, 0f);
+
+            _horizontalLayoutGroup = FindObjectOfType<HorizontalLayoutGroup>();
+            foreach (KeyValuePair<PlayerRef, NetworkObject> items in _spawnedCharacters)
+            {
+                NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, items.Key);
+                networkPlayerObject.transform.parent = _horizontalLayoutGroup.transform;
+            }
+        }
+    **/
+    }
     public void OnSceneLoadStart(NetworkRunner runner) { }
     public void OnInput(NetworkRunner runner, NetworkInput input) { }
 }
